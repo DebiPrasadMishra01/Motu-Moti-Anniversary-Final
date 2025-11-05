@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Motu ❤️ Moti — Our Cinematic Anniversary</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --accent:#ff6b8a;
+    --pink:#ffd1e0;
+    --gold:#ffd37a;
+    --muted:rgba(255,255,255,0.87);
+    --card: rgba(255,255,255,0.03);
+    --bg1:#0f0610;
+    --bg2:#17081a;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Poppins,system-ui,-apple-system,'Segoe UI',Roboto,Arial;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--muted);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .center{display:flex;align-items:center;justify-content:center}
+
+  header{padding:18px 16px;text-align:center}
+  header h1{font-family:'Great Vibes',cursive;font-size:42px;color:var(--accent);margin:6px 0;line-height:1}
+  header p{color:var(--muted);margin-top:4px;font-size:14px}
+
+  /* ---------- INTRO SLIDES ---------- */
+  .intro{
+    position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-direction:column;padding:20px;
+  }
+  .slides{
+    position:relative;width:100%;max-width:1100px;height:62vh;max-height:720px;border-radius:16px;overflow:hidden;backdrop-filter: blur(2px);box-shadow:0 28px 80px rgba(8,4,10,0.6);
+    background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+  }
+  .slide{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;transition:opacity 1.2s ease, transform 18s ease;opacity:0;transform:scale(1.02);
+  }
+  .slide.show{opacity:1;transform:scale(1)}
+  .slide img{
+    width:100%;height:100%;object-fit:contain;border-radius:12px;box-shadow:0 18px 60px rgba(2,6,23,0.45);
+    transition:transform 12s ease;
+  }
+  .slide.show img{transform:scale(1.03)}
+  .introOverlay{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg, rgba(255,240,245,0.02), rgba(255,230,240,0.01));mix-blend-mode:screen}
+
+  /* Ken Burns subtle transform via CSS animation (slight drift) */
+  @keyframes kb-zoom { 0% { transform: scale(1); } 100% { transform: scale(1.03);} }
+
+  .introText{position:relative;z-index:40;text-align:center;color:var(--muted);padding:18px;margin-top:14px}
+  .introText h2{font-family:'Great Vibes';font-size:34px;color:#ffdbe7;margin:0 12px;text-shadow:0 8px 28px rgba(255,130,160,0.12)}
+  .introText p{margin-top:8px;color:var(--muted);max-width:820px}
+
+  /* Tap button */
+  .beginWrap{position:relative;z-index:50;margin-top:16px}
+  .beginBtn{
+    background:linear-gradient(90deg,var(--accent),#ff9fb0);
+    color:#260617;border:0;padding:12px 20px;border-radius:999px;font-weight:700;cursor:pointer;box-shadow:0 12px 40px rgba(255,107,138,0.12);
+    font-size:16px;
+  }
+  .skipBtn{margin-left:12px;background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:10px 12px;border-radius:999px;cursor:pointer}
+
+  /* dust & sparkles canvas on intro */
+  .dustCanvas{position:absolute;inset:0;pointer-events:none;z-index:30}
+
+  /* ---------- COUNTDOWN ---------- */
+  .countWrap{display:none;min-height:100vh;align-items:center;justify-content:center;padding:32px}
+  .countCard{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:18px;max-width:720px;width:100%;text-align:center;box-shadow:0 18px 60px rgba(6,2,10,0.6)}
+  .title{font-size:18px;color:var(--gold);font-weight:700}
+  .subtitle{color:var(--muted);margin-top:6px}
+  .countdown{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+  .unit{min-width:80px;padding:12px;border-radius:12px;background:var(--card);box-shadow:inset 0 1px 0 rgba(255,255,255,0.02);text-align:center}
+  .unit .num{font-size:28px;font-weight:800;color:#fff}
+  .unit .lbl{font-size:12px;color:var(--muted);margin-top:6px}
+
+  /* shimmering border */
+  .glowBorder{position:relative;padding:6px;border-radius:20px}
+  .glowBorder:after{content:'';position:absolute;inset:-6px;border-radius:26px;background:linear-gradient(90deg,var(--pink),var(--gold));filter:blur(12px);opacity:0.25;z-index:-1}
+
+  /* floating hearts small during countdown */
+  .mini-heart{position:fixed;width:12px;height:12px;transform:rotate(45deg);border-radius:3px;pointer-events:none;z-index:45}
+
+  /* ---------- CELEBRATION ---------- */
+  .celebration{display:none;min-height:100vh;padding:28px;align-items:center;justify-content:center;flex-direction:column;text-align:center;position:relative}
+  .celebration.active{display:flex}
+  .celebration h2{font-family:'Great Vibes',cursive;font-size:44px;color:var(--accent);text-shadow:0 14px 40px rgba(255,107,138,0.15)}
+  .celebration p{color:var(--muted);max-width:880px;margin:0 12px}
+  .cards{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;width:100%}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.007));border-radius:12px;padding:12px;min-width:240px;max-width:360px;box-shadow:0 12px 40px rgba(2,6,23,0.5)}
+  .photo{width:100%;height:auto;border-radius:8px;display:block;object-fit:contain}
+  .letter-text{white-space:pre-wrap;color:#fff7fb;line-height:1.6;font-size:15px;padding:8px}
+
+  /* confetti canvas */
+  #confetti{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:70}
+
+  /* floating message style */
+  .float-msg{position:fixed;pointer-events:none;font-weight:700;color:#2b0016;font-size:13px;padding:8px 12px;border-radius:18px;background:linear-gradient(90deg,var(--accent),var(--gold));transform:translate(-50%,-50%);z-index:80;white-space:nowrap}
+
+  /* music icon */
+  .musicIcon{position:fixed;right:12px;top:12px;width:46px;height:46px;border-radius:12px;background:linear-gradient(90deg,var(--accent),#ffd1e0);display:flex;align-items:center;justify-content:center;color:#2b0015;z-index:85;box-shadow:0 8px 36px rgba(255,160,190,0.12);cursor:pointer}
+  .musicIcon.playing{animation:spin 4s linear infinite}
+  @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+
+  /* responsive */
+  @media (max-width:800px){
+    header h1{font-size:36px}
+    .slides{height:54vh}
+    .introText h2{font-size:30px}
+    .countCard{padding:16px}
+    .unit{min-width:64px;padding:10px}
+    .card{min-width:200px}
+  }
+</style>
+</head>
+<body>
+
+<header class="center">
+  <div>
+    <h1>Motu ❤️ Moti</h1>
+    <p>Our love — a cinematic surprise</p>
+  </div>
+</header>
+
+<!-- INTRO / SLIDES -->
+<section class="intro" id="intro">
+  <div class="slides" id="slidesRoot">
+    <div class="slide show"><img src="4.jpg" alt="memory 1"></div>
+    <div class="slide"><img src="5.jpg" alt="memory 2"></div>
+    <div class="slide"><img src="6.jpg" alt="memory 3"></div>
+    <div class="slide"><img src="7.jpg" alt="memory 4"></div>
+    <div class="slide"><img src="8.jpg" alt="memory 5"></div>
+    <div class="introOverlay"></div>
+    <canvas class="dustCanvas" id="dustCanvas"></canvas>
+  </div>
+
+  <div class="introText">
+    <h2>Every moment with you is a story, Moti…</h2>
+    <p>Let our memories bloom. When you're ready, tap below to begin our story & enable sound.</p>
+    <div class="beginWrap">
+      <button class="beginBtn" id="beginBtn">💫 Tap to Begin Our Story</button>
+      <button class="skipBtn" id="skipBtn" title="Skip intro">Skip</button>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<main class="countWrap center" id="countWrap">
+  <div class="countCard glowBorder">
+    <div class="title">Our Day Is Coming...</div>
+    <div class="subtitle">Countdown to Midnight — November 9</div>
+
+    <div class="countdown" id="countdown">
+      <div class="unit"><div class="num" id="days">00</div><div class="lbl">Days</div></div>
+      <div class="unit"><div class="num" id="hours">00</div><div class="lbl">Hours</div></div>
+      <div class="unit"><div class="num" id="minutes">00</div><div class="lbl">Minutes</div></div>
+      <div class="unit"><div class="num" id="seconds">00</div><div class="lbl">Seconds</div></div>
+    </div>
+    <div style="margin-top:16px">
+      <button class="beginBtn" id="enableSoundBtn">Enable Sound</button>
+    </div>
+  </div>
+</main>
+
+<!-- CELEBRATION -->
+<section class="celebration" id="celebration">
+  <h2>🎉 Happy Anniversary — Motu ❤️ Moti 🎉</h2>
+  <p>Tonight the stars are for you. May our love keep growing — today, tomorrow, forever.</p>
+
+  <div class="cards" id="cards">
+    <div class="card"><img src="1.jpg" class="photo" alt="Memory 1"><div style="margin-top:10px;font-weight:700;color:var(--accent)">The Day We Met</div></div>
+    <div class="card"><img src="2.jpg" class="photo" alt="Memory 2"><div style="margin-top:10px;font-weight:700;color:var(--accent)">Our Sweet Moments</div></div>
+    <div class="card"><div class="letter-text" id="letterText">Loading...</div></div>
+  </div>
+</section>
+
+<!-- confetti canvas -->
+<canvas id="confetti"></canvas>
+
+<!-- music (user files) -->
+<audio id="introAudio" src="intro.mp3" preload="auto"></audio>
+<audio id="music" src="lovemusic.mp3" preload="auto" loop></audio>
+
+<!-- music icon -->
+<div class="musicIcon" id="musicIcon" title="Play/Pause">❤</div>
+
+<script>
+/* ---------------- CONFIG ---------------- */
+const INTRO_DURATION = 21000;      // total intro length (ms)
+const SLIDE_COUNT = 5;            // number of slides
+const SLIDE_INTERVAL = Math.floor(INTRO_DURATION / SLIDE_COUNT);
+const targetDate = (function(){ const now=new Date(); const y=now.getFullYear(); let t=new Date(y,10,9,0,0,0,0); if(now>=t) t=new Date(y+1,10,9,0,0,0,0); return t; })();
+
+/* ---------------- ELEMENTS ---------------- */
+const slides = Array.from(document.querySelectorAll('.slide'));
+const introEl = document.getElementById('intro');
+const dustCanvas = document.getElementById('dustCanvas');
+const beginBtn = document.getElementById('beginBtn');
+const skipBtn = document.getElementById('skipBtn');
+const countWrap = document.getElementById('countWrap');
+const daysEl = document.getElementById('days'), hoursEl = document.getElementById('hours'), minutesEl = document.getElementById('minutes'), secondsEl = document.getElementById('seconds');
+const enableSoundBtn = document.getElementById('enableSoundBtn');
+const celebration = document.getElementById('celebration');
+const letterText = document.getElementById('letterText');
+const introAudio = document.getElementById('introAudio');
+const music = document.getElementById('music');
+const musicIcon = document.getElementById('musicIcon');
+const confettiCanvas = document.getElementById('confetti');
+
+/* ---------------- SLIDESHOW (Ken Burns & crossfade) ---------------- */
+let slideIndex = 0;
+function showSlide(i){
+  slides.forEach((s, idx)=> s.classList.toggle('show', idx === i));
+}
+showSlide(0);
+let slideTimer = setInterval(()=> {
+  slideIndex++;
+  if(slideIndex < SLIDE_COUNT) showSlide(slideIndex);
+  else {
+    clearInterval(slideTimer);
+    // reveal the "Tap to Begin" prominently if still visible
+    // nothing — we keep button for user action
+  }
+}, SLIDE_INTERVAL);
+
+/* Skip intro or finish intro: hide intro and show countdown */
+function endIntroAndShowCountdown(){
+  clearInterval(slideTimer);
+  introEl.style.display = 'none';
+  countWrap.style.display = 'flex';
+  // stop intro audio if playing
+  try{ introAudio.pause(); introAudio.currentTime = 0; }catch(e){}
+}
+
+/* Buttons */
+beginBtn.addEventListener('click', () => {
+  // user gesture: start intro audio + show countdown when intro done
+  try{ introAudio.volume = 0.9; introAudio.play().catch(()=>{}); }catch(e){}
+  // hide start button for now (but slideshow continues)
+  beginBtn.style.display = 'none';
+  skipBtn.style.display = 'inline-block';
+  // schedule transition at end of intro
+  setTimeout(endIntroAndShowCountdown, INTRO_DURATION);
+  // also attach click-to-spawn messages
+  document.addEventListener('click', spawnFloatingMessage);
+});
+skipBtn.addEventListener('click', endIntroAndShowCountdown);
+
+/* Also allow skipping if user wants immediately (tap and proceed) */
+enableSoundBtn.addEventListener('click', () => {
+  // start main music on user gesture
+  playMusicFadeIn();
+  // also allow click messages
+  document.addEventListener('click', spawnFloatingMessage);
+});
+
+/* Music icon toggle */
+musicIcon.addEventListener('click', () => {
+  if (music.paused) playMusicFadeIn();
+  else { music.pause(); musicIcon.classList.remove('playing'); musicIcon.textContent = '❤'; }
+});
+function playMusicFadeIn(){
+  try {
+    music.volume = 0;
+    music.play().catch(()=>{});
+    musicIcon.classList.add('playing');
+    musicIcon.textContent = '⏸';
+    let v = 0;
+    const t = setInterval(()=> {
+      v = Math.min(0.88, v + 0.02); music.volume = v;
+      if (v >= 0.88) clearInterval(t);
+    }, 120);
+  } catch(e){}
+}
+
+/* ---------------- DUST PARTICLES (intro) ---------------- */
+(function dustParticles(){
+  const ctx = dustCanvas.getContext('2d');
+  let w = innerWidth, h = innerHeight;
+  function resize(){ w = dustCanvas.width = innerWidth; h = dustCanvas.height = innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+  const particles = Array.from({length:36}).map(()=>({
+    x: Math.random()*w, y: Math.random()*h, r:1+Math.random()*2, vx:(Math.random()-0.5)*0.2, vy:-0.05 - Math.random()*0.2, alpha:0.12+Math.random()*0.5
+  }));
+  function frame(){
+    ctx.clearRect(0,0,w,h);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.y < -20) p.y = h + 20;
+      if (p.x < -30) p.x = w + 30;
+      if (p.x > w + 30) p.x = -30;
+      ctx.beginPath(); ctx.fillStyle = `rgba(255,230,240,${p.alpha})`; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+      // subtle glow
+      ctx.beginPath(); ctx.fillStyle = `rgba(255,210,230,${p.alpha*0.08})`; ctx.arc(p.x,p.y,p.r*6,0,Math.PI*2); ctx.fill();
+    });
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ---------------- COUNTDOWN ---------------- */
+function updateCountdown(){
+  const now = new Date();
+  const diff = targetDate - now;
+  if (diff <= 0) {
+    // reveal celebration immediately
+    revealCelebration();
+    clearInterval(cntInterval);
+    return;
+  }
+  const s = Math.floor(diff / 1000);
+  const days = Math.floor(s / (60*60*24));
+  const hours = Math.floor((s % (60*60*24)) / (60*60));
+  const minutes = Math.floor((s % (60*60)) / 60);
+  const seconds = s % 60;
+  daysEl.textContent = String(days).padStart(2,'0');
+  hoursEl.textContent = String(hours).padStart(2,'0');
+  minutesEl.textContent = String(minutes).padStart(2,'0');
+  secondsEl.textContent = String(seconds).padStart(2,'0');
+}
+let cntInterval = setInterval(updateCountdown, 1000);
+updateCountdown();
+
+/* ---------------- CELEBRATION ---------------- */
+function revealCelebration(){
+  // hide countdown
+  document.querySelector('.countWrap').style.display = 'none';
+  // show celebration
+  celebration.classList.add('active');
+  // fill letter text
+  letterText.textContent = `My dearest Moti,\n\nFrom the first smile to this midnight, every moment with you has been a treasure. I built this little surprise to tell you: thank you — for your love, your warmth, your laughter. I promise to love you more with every day. Happy Anniversary, my love.\n\n— Motu ❤️`;
+  // start confetti + hearts, play music
+  startConfetti(220);
+  startFloatingHearts(380);
+  playMusicFadeIn();
+  // allow click messages
+  document.addEventListener('click', spawnFloatingMessage);
+}
+
+/* ---------------- CONFETTI CANVAS ---------------- */
+const ctx = confettiCanvas.getContext('2d');
+function resizeConfCanvas(){ confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight; }
+window.addEventListener('resize', resizeConfCanvas); resizeConfCanvas();
+
+let confettiPieces = [], confettiRunning=false;
+function startConfetti(count=120){
+  confettiPieces = [];
+  for (let i=0;i<count;i++){
+    confettiPieces.push({
+      x: Math.random()*confettiCanvas.width,
+      y: Math.random()*-confettiCanvas.height,
+      vy: 2 + Math.random()*5,
+      size: 6 + Math.random()*10,
+      rot: Math.random()*360,
+      color: `hsl(${330 + Math.random()*40},70%,60%)`
+    });
+  }
+  runConfetti();
+}
+function runConfetti(){
+  if (confettiRunning) return;
+  confettiRunning = true;
+  function step(){
+    ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+    confettiPieces.forEach(p=>{
+      p.y += p.vy;
+      p.x += Math.sin(p.y/20)*1.5;
+      p.rot += 3;
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rot * Math.PI/180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size*0.6);
+      ctx.restore();
+    });
+    confettiPieces = confettiPieces.filter(p => p.y < confettiCanvas.height + 80);
+    if (confettiPieces.length > 0) requestAnimationFrame(step);
+    else confettiRunning = false;
+  }
+  requestAnimationFrame(step);
+}
+
+/* ---------------- FLOATING HEARTS ---------------- */
+let heartsInterval = null;
+function spawnHeartOnce(){
+  const d = document.createElement('div'); d.className = 'mini-heart';
+  d.style.width = '12px'; d.style.height = '12px';
+  d.style.left = (Math.random()*85 + 7) + 'vw';
+  d.style.top = (Math.random()*60 + 10) + 'vh';
+  d.style.background = `linear-gradient(135deg, ${getRandomPink()}, ${getRandomGold()})`;
+  d.style.transform = 'rotate(45deg)';
+  d.style.borderRadius = '3px';
+  d.style.zIndex = 60;
+  document.body.appendChild(d);
+  d.animate([{ transform: 'translateY(0) scale(1) rotate(45deg)', opacity:1 }, { transform: 'translateY(-80px) scale(0.4) rotate(15deg)', opacity:0 }], { duration: 4200 + Math.random()*2600, easing:'cubic-bezier(.2,.8,.2,1)'});
+  setTimeout(()=> d.remove(), 7600);
+}
+function startFloatingHearts(rate=500){
+  if (heartsInterval) return;
+  heartsInterval = setInterval(spawnHeartOnce, rate);
+}
+function getRandomPink(){ return `hsl(${350 + Math.random()*20},80%,65%)` }
+function getRandomGold(){ return `hsl(${45 + Math.random()*18},100%,72%)` }
+
+/* ---------------- CLICK MESSAGES ---------------- */
+const messages = ['Love you ❤️','Forever 💞','Moti ✨','My Heart 💓','Always & Forever'];
+function spawnFloatingMessage(e){
+  const x = e && e.clientX ? e.clientX : window.innerWidth/2;
+  const y = e && e.clientY ? e.clientY : window.innerHeight/2;
+  const el = document.createElement('div'); el.className = 'float-msg';
+  el.textContent = messages[Math.floor(Math.random()*messages.length)];
+  el.style.left = x + 'px'; el.style.top = y + 'px';
+  document.body.appendChild(el);
+  const dx = (Math.random()*120 - 60), dy = -120 - Math.random()*40;
+  el.animate([{ transform:'translate(-50%,-50%) scale(1)', opacity:1 }, { transform:`translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(0.8)`, opacity:0 }], { duration: 1800, easing: 'cubic-bezier(.2,.8,.2,1)'});
+  setTimeout(()=> el.remove(), 1900);
+}
+
+/* ---------------- small sparkle during countdown ---------------- */
+(function smallSparkles(){
+  function spawn(){
+    const s = document.createElement('div');
+    s.style.position = 'fixed'; s.style.width = '6px'; s.style.height = '6px'; s.style.borderRadius = '50%';
+    s.style.left = (Math.random()*92+4) + 'vw'; s.style.top = (Math.random()*84+6) + 'vh';
+    s.style.background = Math.random() > 0.5 ? '#ffd37a' : '#ffd1e0'; s.style.opacity = '0.95'; s.style.zIndex = 8;
+    document.body.appendChild(s);
+    s.animate([{ transform:'translateY(0) scale(1)', opacity:0.95 }, { transform:'translateY(-40px) scale(0.6)', opacity:0 }], { duration: 2200 });
+    setTimeout(()=> s.remove(), 2200);
+  }
+  setInterval(spawn, 900);
+})();
+
+/* ---------------- TRY REVEAL IF ALREADY PAST TARGET ON LOAD ---------------- */
+if (new Date() >= targetDate){
+  setTimeout(()=> { clearInterval(cntInterval); revealCelebration(); }, 600);
+}
+
+/* cleanup */
+window.addEventListener('beforeunload', ()=> {
+  clearInterval(cntInterval);
+  if (heartsInterval) clearInterval(heartsInterval);
+});
+
+/* optional: allow pressing space/enter to start (for desktop) */
+window.addEventListener('keydown', (e)=> {
+  if (e.code === 'Space' || e.key === 'Enter') {
+    if (beginBtn.style.display !== 'none') { beginBtn.click(); }
+    else if (enableSoundBtn) { enableSoundBtn.click(); }
+  }
+});
+</script>
+</body>
+</html>
